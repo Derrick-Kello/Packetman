@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
@@ -12,6 +15,9 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+    
+    env:
+      GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
     
     steps:
       - name: Checkout code
@@ -25,7 +31,5 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Build and publish
+      - name: Build and publish to GitHub Releases
         run: npm run build
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
