@@ -25,22 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Electron app
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run build
-
-      - name: Package Electron app
+      - name: Build & Package Electron app
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            npx electron-builder --win --publish never
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            npx electron-builder --mac --publish never
-          else
-            npx electron-builder --linux --publish never
-          fi
+          npx electron-builder --${{ matrix.os == 'windows-latest' && 'win' || matrix.os == 'macos-latest' && 'mac' || 'linux' }} --publish never
 
       - name: Upload Release Artifacts
         uses: actions/upload-artifact@v4
