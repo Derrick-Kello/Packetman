@@ -19,7 +19,10 @@
         "postman",
         "electron"
     ],
-    "author": "Hostelhubb Developer Team",
+    "author": {
+        "name": "Hostelhubb Developer Team",
+        "email": "hostelhubbofficial@gmail.com"
+      },
     "license": "MIT",
     "devDependencies": {
         "electron": "^27.0.0",
