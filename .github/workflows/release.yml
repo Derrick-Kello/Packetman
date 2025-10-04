@@ -1,56 +1,31 @@
-name: Build & Release Electron App
+name: Build and Release
 
 on:
   push:
     tags:
-      - 'v*' # Runs only when you push tags like v1.0.0, v2.0.1, etc.
+      - 'v*'
 
 jobs:
   release:
-    name: Build and Publish Release
     runs-on: ${{ matrix.os }}
+    
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-
+          node-version: 18
+      
       - name: Install dependencies
         run: npm install
-
-      - name: Build & Package Electron app
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          npx electron-builder --${{ matrix.os == 'windows-latest' && 'win' || matrix.os == 'macos-latest' && 'mac' || 'linux' }} --publish never
-
-      - name: Upload Release Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: electron-build-${{ matrix.os }}
-          path: dist/
-
-  publish:
-    name: Create GitHub Release
-    needs: release
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: dist
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/**/*
+      
+      - name: Build and publish
+        run: npm run build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
