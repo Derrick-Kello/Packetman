@@ -122,3 +122,4 @@ For support, email support@hostelhubb.com or open an issue on GitHub.
 ---
 
 **Built with ❤️ for developers worldwide**
+**From Hostelhubb Developer Team**
