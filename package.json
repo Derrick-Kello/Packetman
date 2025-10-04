@@ -22,16 +22,24 @@
     "author": {
         "name": "Hostelhubb Developer Team",
         "email": "hostelhubbofficial@gmail.com"
-      },
+    },
     "license": "MIT",
     "devDependencies": {
         "electron": "^27.0.0",
         "electron-builder": "^24.6.4",
         "electron-icon-builder": "^2.0.1"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Derrick-Kello/packetman.git"
+    },
     "build": {
         "appId": "com.packetman.client",
         "productName": "PacketMan",
+        "publish": {
+            "provider": "github",
+            "releaseType": "release"
+        },
         "directories": {
             "output": "dist"
         },
