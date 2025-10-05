@@ -24,6 +24,178 @@
       height: 100vh;
     }
 
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 300px;
+      background: #252526;
+      border-right: 1px solid #3c3c3c;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 15px;
+      border-bottom: 1px solid #3c3c3c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .collection-item {
+      margin-bottom: 5px;
+    }
+
+    .collection-header {
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      background: #2d2d30;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s;
+      gap: 8px;
+    }
+
+    .collection-header:hover {
+      background: #3c3c3c;
+    }
+
+    .collection-header.expanded {
+      background: #3c3c3c;
+    }
+
+    .collection-icon {
+      font-size: 12px;
+      color: #888;
+      transition: transform 0.2s;
+    }
+
+    .collection-icon.expanded {
+      transform: rotate(90deg);
+    }
+
+    .collection-name {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 500;
+      color: #d4d4d4;
+    }
+
+    .collection-actions {
+      display: flex;
+      gap: 5px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .collection-header:hover .collection-actions {
+      opacity: 1;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: none;
+      color: #888;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 3px;
+    }
+
+    .icon-btn:hover {
+      background: #555;
+      color: #fff;
+    }
+
+    .request-list {
+      display: none;
+      padding-left: 20px;
+      margin-top: 5px;
+    }
+
+    .request-list.expanded {
+      display: block;
+    }
+
+    .request-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 10px;
+      margin-bottom: 3px;
+      background: #1e1e1e;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s;
+      gap: 8px;
+    }
+
+    .request-item:hover {
+      background: #2d2d30;
+    }
+
+    .request-item.active {
+      background: #0e639c;
+    }
+
+    .request-method {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .request-name {
+      flex: 1;
+      font-size: 12px;
+      color: #d4d4d4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .new-btn {
+      background: #0e639c;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .new-btn:hover {
+      background: #1177bb;
+    }
+
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     .header {
       background: #252526;
       padding: 15px 20px;
@@ -234,6 +406,27 @@
       overflow: auto;
     }
 
+    .collection-controls {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #3c3c3c;
+    }
+
+    .collection-selector select {
+      background: #3c3c3c;
+      border: 1px solid #555;
+      color: #d4d4d4;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .collection-selector select:focus {
+      outline: none;
+      border-color: #0e639c;
+    }
+
     .saved-request {
       background: #2d2d30;
       padding: 12px 15px;
@@ -281,68 +474,79 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🚀 API Testing Client</h1>
+      <h1>🚀 PacketMan</h1>
     </div>
 
-    <div class="request-section">
-      <div class="url-bar">
-        <select id="method">
-          <option value="GET">GET</option>
-          <option value="POST">POST</option>
-          <option value="PUT">PUT</option>
-          <option value="PATCH">PATCH</option>
-          <option value="DELETE">DELETE</option>
-          <option value="HEAD">HEAD</option>
-          <option value="OPTIONS">OPTIONS</option>
-        </select>
-        <input type="text" id="url" placeholder="https://jsonplaceholder.typicode.com/posts/1">
-        <button id="sendBtn">Send</button>
-        <button id="saveBtn" style="background: #5a5a5a;">Save</button>
-      </div>
-    </div>
-
-    <div class="main-content">
-      <div class="request-panel">
-        <div class="panel-header">Request Configuration</div>
-        <div class="tabs">
-          <button class="tab active" data-tab="auth">Auth</button>
-          <button class="tab" data-tab="headers">Headers</button>
-          <button class="tab" data-tab="body">Body</button>
-          <button class="tab" data-tab="saved">Saved (0)</button>
+    <div class="app-body">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h2>Collections</h2>
+          <button class="new-btn" id="newCollectionBtn">+ New</button>
         </div>
-        <div class="panel-content">
-          <div id="headers" class="tab-content active">
-            <div id="headersList"></div>
-            <button class="add-header-btn" id="addHeaderBtn">+ Add Header</button>
-          </div>
-          <div id="body" class="tab-content">
-            <textarea id="requestBody" placeholder='Enter request body (JSON, XML, text, etc.)&#10;&#10;Example:&#10;{&#10;  "title": "foo",&#10;  "body": "bar",&#10;  "userId": 1&#10;}'></textarea>
-          </div>
-          <div id="saved" class="tab-content saved-requests">
-            <div id="savedRequestsList"></div>
-          </div>
+        <div class="sidebar-content" id="sidebarContent">
+          <div class="empty-state">No collections yet.<br>Create one to get started!</div>
         </div>
       </div>
 
-      <div class="response-panel">
-        <div class="panel-header">
-          <span>Response</span>
-          <div id="statusBadge"></div>
+      <!-- Main Area -->
+      <div class="main-area">
+        <div class="request-section">
+          <div class="url-bar">
+            <select id="method">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="PATCH">PATCH</option>
+              <option value="DELETE">DELETE</option>
+              <option value="HEAD">HEAD</option>
+              <option value="OPTIONS">OPTIONS</option>
+            </select>
+            <input type="text" id="url" placeholder="https://jsonplaceholder.typicode.com/posts/1">
+            <button id="sendBtn">Send</button>
+            <button id="saveBtn" style="background: #5a5a5a;">Save</button>
+          </div>
         </div>
-        <div class="tabs">
-          <button class="tab active" data-tab="response-body">Body</button>
-          <button class="tab" data-tab="response-headers">Headers</button>
-        </div>
-        <div class="panel-content">
-          <div id="response-body" class="tab-content active">
-            <div class="response-info" id="responseInfo" style="display: none;"></div>
-            <pre id="responseBody">Click "Send" to make a request and see the response here.
+
+        <div class="main-content">
+          <div class="request-panel">
+            <div class="panel-header">Request Configuration</div>
+            <div class="tabs">
+              <button class="tab active" data-tab="headers">Headers</button>
+              <button class="tab" data-tab="body">Body</button>
+            </div>
+            <div class="panel-content">
+              <div id="headers" class="tab-content active">
+                <div id="headersList"></div>
+                <button class="add-header-btn" id="addHeaderBtn">+ Add Header</button>
+              </div>
+              <div id="body" class="tab-content">
+                <textarea id="requestBody" placeholder='Enter request body (JSON, XML, text, etc.)&#10;&#10;Example:&#10;{&#10;  "title": "foo",&#10;  "body": "bar",&#10;  "userId": 1&#10;}'></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="response-panel">
+            <div class="panel-header">
+              <span>Response</span>
+              <div id="statusBadge"></div>
+            </div>
+            <div class="tabs">
+              <button class="tab active" data-tab="response-body">Body</button>
+              <button class="tab" data-tab="response-headers">Headers</button>
+            </div>
+            <div class="panel-content">
+              <div id="response-body" class="tab-content active">
+                <div class="response-info" id="responseInfo" style="display: none;"></div>
+                <pre id="responseBody">Click "Send" to make a request and see the response here.
 
 Try this test endpoint:
 GET https://jsonplaceholder.typicode.com/posts/1</pre>
-          </div>
-          <div id="response-headers" class="tab-content">
-            <pre id="responseHeaders">Response headers will appear here after sending a request.</pre>
+              </div>
+              <div id="response-headers" class="tab-content">
+                <pre id="responseHeaders">Response headers will appear here after sending a request.</pre>
+              </div>
+            </div>
           </div>
         </div>
       </div>
